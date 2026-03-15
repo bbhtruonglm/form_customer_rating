@@ -1,0 +1,21 @@
+@import "tailwindcss";
+
+select.staff-select {
+  font-size: 1.125rem;
+  line-height: 1.6;
+}
+
+select.staff-select option {
+  font-size: 1.125rem;
+  line-height: 1.7;
+}
+
+@media (min-width: 640px) {
+  select.staff-select {
+    font-size: 1rem;
+  }
+
+  select.staff-select option {
+    font-size: 1rem;
+  }
+}
