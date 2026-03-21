@@ -1,12 +1,14 @@
 import { useEffect, useRef, useState } from 'react';
 import type { ChangeEvent, MouseEvent } from 'react';
-import { Calendar, ChevronDown, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Calendar, ChevronDown, ChevronLeft, ChevronRight, Clock } from 'lucide-react';
 
 interface DateSelectProps {
   name: string;
+  nameTime?: string;
   onChange: (event: ChangeEvent<HTMLInputElement>) => void;
   placeholder?: string;
   value: string;
+  valueTime?: string;
   variant?: 'default' | 'staff';
 }
 
@@ -73,9 +75,11 @@ function getCalendarDays(visibleMonth: Date) {
 
 export default function DateSelect({
   name,
+  nameTime,
   onChange,
   placeholder = 'Chọn ngày thực hiện',
   value,
+  valueTime,
   variant = 'default',
 }: DateSelectProps) {
   const [isOpen, setIsOpen] = useState(false);
@@ -116,8 +120,8 @@ export default function DateSelect({
         : 'border-slate-200 hover:border-sky-200';
   const panelClass =
     variant === 'staff'
-      ? 'border-slate-200 bg-white shadow-lg shadow-slate-200/80'
-      : 'border-sky-100 bg-white shadow-lg shadow-sky-100/70';
+      ? 'border-slate-200 bg-white shadow-lg shadow-slate-200/80 z-20 absolute mt-1 w-[280px]'
+      : 'border-sky-100 bg-white shadow-lg shadow-sky-100/70 z-20 absolute mt-1 w-full max-w-[320px]';
   const selectedDayClass = variant === 'staff' ? 'bg-slate-900 text-white' : 'bg-sky-600 text-white';
 
   const changeMonth = (step: number) => {
@@ -127,11 +131,24 @@ export default function DateSelect({
   const handleSelectDate = (date: Date) => {
     onChange(createSyntheticEvent(name, formatDateValue(date)));
     setVisibleMonth(date);
-    setIsOpen(false);
+    // Don't auto-close if time selection is enabled
+    if (!nameTime) {
+      setIsOpen(false);
+    }
   };
 
+  const displayDateTime = () => {
+    const fDate = formatDisplayDate(value) || placeholder;
+    if (nameTime && valueTime) {
+      return `${valueTime} - ${fDate}`;
+    }
+    return fDate;
+  };
+
+  const hasTimeSelected = Boolean(valueTime);
+
   return (
-    <div className="space-y-1.5" ref={containerRef}>
+    <div className="space-y-1.5 relative" ref={containerRef}>
       <button
         className={`flex min-h-10 w-full items-center justify-between rounded-xl border bg-white px-2.5 py-2 text-left transition-colors ${triggerClass}`}
         onClick={() => setIsOpen((current) => !current)}
@@ -145,10 +162,10 @@ export default function DateSelect({
                 value ? 'text-slate-800' : 'text-slate-400'
               }`}
             >
-              {formatDisplayDate(value) || placeholder}
+              {displayDateTime()}
             </span>
             <p className="mt-0.5 text-[11px] font-bold uppercase tracking-[0.08em] text-slate-400">
-              {value ? 'Đã chọn ngày' : 'Chưa chọn ngày'}
+              {value && (!nameTime || valueTime) ? 'Đã chọn thời gian' : 'Chưa chọn đủ thông tin'}
             </p>
           </div>
         </div>
@@ -158,7 +175,7 @@ export default function DateSelect({
       </button>
 
       {isOpen ? (
-        <div className={`rounded-2xl border p-2.5 ${panelClass}`}>
+        <div className={`rounded-2xl border p-3 ${panelClass}`}>
           <div className="space-y-2.5">
             <div className="flex items-center justify-between">
               <button
@@ -210,13 +227,42 @@ export default function DateSelect({
               })}
             </div>
 
-            <button
-              className="w-full rounded-xl border border-sky-100 px-3 py-2 text-sm font-bold text-sky-700 transition-colors hover:bg-sky-50"
-              onClick={() => handleSelectDate(new Date())}
-              type="button"
-            >
-              Chọn hôm nay
-            </button>
+            {nameTime && (
+              <div className="mt-3 border-t border-slate-100 pt-3">
+                <div className="flex items-center gap-3">
+                  <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-slate-50 text-slate-400">
+                    <Clock className="h-4 w-4" />
+                  </div>
+                  <input
+                    className="flex-1 rounded-lg border border-slate-200 px-3 py-1.5 text-sm font-bold text-slate-700 outline-none transition-colors focus:border-sky-500 focus:ring-4 focus:ring-sky-100"
+                    name={nameTime}
+                    onChange={onChange}
+                    step="900" 
+                    type="time"
+                    value={valueTime || ''}
+                  />
+                </div>
+              </div>
+            )}
+
+            <div className="mt-2 flex items-center justify-end gap-2 border-t border-slate-100 pt-2">
+              <button
+                className="rounded-xl px-4 py-2 text-sm font-bold text-slate-500 transition-colors hover:bg-slate-50 hover:text-slate-700"
+                onClick={() => handleSelectDate(new Date())}
+                type="button"
+              >
+                Hôm nay
+              </button>
+              {nameTime && (
+                <button
+                  className="rounded-xl bg-sky-600 px-4 py-2 text-sm font-bold text-white shadow-md shadow-sky-200 transition-transform active:scale-95 hover:bg-sky-700"
+                  onClick={() => setIsOpen(false)}
+                  type="button"
+                >
+                  Xong
+                </button>
+              )}
+            </div>
           </div>
         </div>
       ) : null}

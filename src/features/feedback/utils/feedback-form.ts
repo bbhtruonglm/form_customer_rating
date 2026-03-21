@@ -27,7 +27,9 @@ export function createInitialFormData(): FeedbackFormData {
     organization: '',
     eventName: '',
     eventStartDate: '',
+    eventStartTime: '',
     eventEndDate: '',
+    eventEndTime: '',
     lookupCode: '',
     location: '',
     equipment: [],
@@ -67,7 +69,9 @@ export function validateCustomerForm(formData: FeedbackFormData) {
   if (!formData.email) errors.push('Vui lòng nhập email');
   if (!formData.eventName) errors.push('Vui lòng nhập tên sự kiện');
   if (!formData.eventStartDate) errors.push('Vui lòng chọn từ ngày tổ chức');
+  if (!formData.eventStartTime) errors.push('Vui lòng chọn giờ bắt đầu');
   if (!formData.eventEndDate) errors.push('Vui lòng chọn đến ngày tổ chức');
+  if (!formData.eventEndTime) errors.push('Vui lòng chọn giờ kết thúc');
   if (
     formData.eventStartDate &&
     formData.eventEndDate &&

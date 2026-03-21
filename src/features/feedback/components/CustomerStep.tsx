@@ -146,9 +146,11 @@ export default function CustomerStep({
               </label>
               <DateSelect
                 name="eventStartDate"
+                nameTime="eventStartTime"
                 onChange={onInputChange}
                 placeholder="Chọn từ ngày"
                 value={formData.eventStartDate}
+                valueTime={formData.eventStartTime}
               />
             </div>
             <div className="flex flex-col gap-2.5">
@@ -157,9 +159,11 @@ export default function CustomerStep({
               </label>
               <DateSelect
                 name="eventEndDate"
+                nameTime="eventEndTime"
                 onChange={onInputChange}
                 placeholder="Chọn đến ngày"
                 value={formData.eventEndDate}
+                valueTime={formData.eventEndTime}
               />
             </div>
           </div>

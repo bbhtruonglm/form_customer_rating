@@ -30,7 +30,9 @@ export interface FeedbackFormData {
   organization: string;
   eventName: string;
   eventStartDate: string;
+  eventStartTime: string;
   eventEndDate: string;
+  eventEndTime: string;
   lookupCode: string;
   location: string;
   equipment: string[];
@@ -50,7 +52,7 @@ export interface FeedbackFormData {
   otherInfo: string;
 }
 
-export type FeedbackStep = 'customer' | 'staff';
+export type FeedbackStep = 'customer' | 'staff' | 'success';
 
 export type FeedbackTextField =
   | 'customerName'
@@ -60,7 +62,9 @@ export type FeedbackTextField =
   | 'organization'
   | 'eventName'
   | 'eventStartDate'
+  | 'eventStartTime'
   | 'eventEndDate'
+  | 'eventEndTime'
   | 'lookupCode'
   | 'location'
   | 'otherEquipment'
