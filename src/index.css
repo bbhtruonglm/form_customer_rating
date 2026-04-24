@@ -1,5 +1,19 @@
 @import "tailwindcss";
 
+:root {
+  font-family: "Times New Roman", Times, serif;
+  font-style: normal;
+}
+
+body,
+button,
+input,
+textarea,
+select {
+  font-family: inherit;
+  font-style: normal;
+}
+
 select.staff-select {
   font-size: 1.125rem;
   line-height: 1.6;

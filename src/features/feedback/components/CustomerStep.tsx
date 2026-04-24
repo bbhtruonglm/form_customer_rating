@@ -45,18 +45,6 @@ export default function CustomerStep({
 }: CustomerStepProps) {
   return (
     <div className="space-y-10 p-5 sm:space-y-12 sm:p-12">
-      <div className="space-y-4 text-center">
-        <div className="mb-1 inline-block rounded-full bg-red-50 px-4 py-2 text-xs font-black uppercase tracking-[0.18em] text-red-600 sm:mb-2 sm:py-1.5 sm:text-[10px] sm:tracking-widest">
-          Customer Feedback Form
-        </div>
-        <h2 className="text-[2.15rem] font-black uppercase italic leading-tight tracking-tight text-slate-900 sm:text-4xl">
-          Phiếu đánh giá <br className="sm:hidden" /> chất lượng dịch vụ
-        </h2>
-        <p className="mx-auto max-w-lg text-base leading-relaxed text-slate-500 sm:text-sm">
-          Trần Gia trân trọng cảm ơn Quý khách. Ý kiến của bạn là động lực để chúng tôi hoàn thiện mỗi ngày.
-        </p>
-      </div>
-
       <section className="space-y-7 sm:space-y-8">
         <SectionTitle index="I" title="Thông tin khách hàng" />
         <div className="grid grid-cols-1 gap-x-8 gap-y-6 md:grid-cols-2">
@@ -267,7 +255,7 @@ export default function CustomerStep({
 
       <div className="flex justify-center pt-4 sm:pt-6">
         <button
-          className="group flex w-full items-center justify-center gap-4 rounded-[2rem] bg-red-600 px-8 py-5 text-base font-black uppercase tracking-[0.16em] text-white shadow-xl shadow-red-200 transition-all active:scale-95 hover:bg-red-700 sm:w-auto sm:px-12 sm:tracking-widest"
+          className="group flex w-full items-center justify-center gap-4 rounded-xl bg-red-600 px-4 py-3 text-base font-black uppercase tracking-[0.16em] text-white shadow-xl shadow-red-200 transition-all active:scale-95 hover:bg-red-700 md:rounded-4xl md:px-8 md:py-5 sm:w-auto sm:tracking-widest"
           disabled={isGeneratingLookupCode}
           onClick={onConfirm}
           type="button"

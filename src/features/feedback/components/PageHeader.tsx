@@ -1,6 +1,4 @@
-import { ClipboardCheck, Users } from 'lucide-react';
-
-import logoImage from '@/assets/imgs/logo.jpg';
+import logoImage from '@/assets/imgs/logo_travel.jpg';
 import type { FeedbackStep } from '@/features/feedback/types';
 
 interface PageHeaderProps {
@@ -9,59 +7,49 @@ interface PageHeaderProps {
 
 export default function PageHeader({ step }: PageHeaderProps) {
   return (
-    <header className="mb-6 rounded-3xl border border-slate-200 bg-white p-5 shadow-sm sm:mb-8 sm:p-6">
-      <div className="flex flex-col gap-5">
-        <div className="flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
-          <div className="w-full lg:w-auto">
-            <img
-              alt="Tran Gia Event"
-              className="mx-auto h-auto w-full max-w-[360px] object-contain sm:mx-0 sm:max-w-[320px]"
-              src={logoImage}
-            />
-          </div>
+    <header className="mb-6 border border-slate-300 bg-white px-4 py-6 text-center sm:mb-8 sm:px-10 sm:py-8">
+      <div className="mx-auto max-w-4xl">
+        <img
+          alt="Tran Gia Travel & Event"
+          className="mx-auto h-auto w-full max-w-[260px] object-contain sm:max-w-[300px]"
+          src={logoImage}
+        />
 
-          <div className="w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-4 text-slate-700 sm:px-5">
-            <p className="text-xs font-black uppercase tracking-[0.2em] text-slate-500">
-              Công Ty TNHH Sự Kiện Trần Gia
+        <div className="mt-4 space-y-1 text-slate-900">
+          <p className="text-[1.85rem] font-bold leading-tight sm:text-[2.2rem]">
+            CÔNG TY TNHH SỰ KIỆN TRẦN GIA
+          </p>
+          <p className="text-[1.1rem] leading-tight sm:text-[1.25rem]">
+            Email: support@trangia-co.com
+          </p>
+          <p className="text-[1.1rem] leading-tight sm:text-[1.25rem]">
+            Website: www.trangiavn.com
+          </p>
+          <p className="text-[1.1rem] leading-tight sm:text-[1.25rem]">
+            Hotline: 0966.126.070 - 0967.763.747
+          </p>
+        </div>
+
+        {step === 'customer' ? (
+          <div className="mt-5 text-slate-900">
+            <p className="text-[1.3rem] font-bold leading-none tracking-[0.2em] sm:text-[1.5rem]">
+              ****************
             </p>
-            <div className="mt-3 space-y-2 text-sm leading-relaxed sm:text-[13px]">
-              <p>Hanoi Office: No. 65 Lien Hoa Lane, Kham Thien Street, Dong Da District, Hanoi.</p>
-              <p>Add2: Hai Boi Commune, Dong Anh District, Hanoi.</p>
-              <p>HCM Branch Office: No. 29/23 Huynh Tan Phat Street, District 7, HCM City.</p>
-            </div>
-            <div className="mt-3 grid grid-cols-1 gap-2 text-sm sm:grid-cols-2 sm:text-[13px]">
+            <h1 className="mt-5 text-[2.2rem] font-bold leading-tight sm:text-[3rem]">
+              PHIẾU ĐÁNH GIÁ CHẤT LƯỢNG DỊCH VỤ
+            </h1>
+            <div className="mt-4 space-y-2 text-[1.35rem] leading-tight sm:text-[1.65rem]">
               <p>
-                <span className="font-bold text-slate-900">Mail:</span> support@trangia-co.com
+                Công ty TNHH Sự kiện Trần Gia xin trân trọng cảm ơn Quý khách hàng đã sử dụng
+                dịch vụ do Trần Gia cung cấp. Nhằm nâng cao chất lượng phục vụ, chúng tôi kính
+                mong Quý khách hàng phản hồi xác nhận một số thông tin dưới đây!
               </p>
               <p>
-                <span className="font-bold text-slate-900">Website:</span> www.trangiavn.com
-              </p>
-              <p className="sm:col-span-2">
-                <span className="font-bold text-slate-900">Hotline:</span> 0984.410.005 - 0246.756.326
+                Chúng tôi xin cam kết các thông tin hoàn này hoàn toàn được giữ bảo mật!
               </p>
             </div>
           </div>
-        </div>
-
-        <div className="flex w-full items-center justify-center gap-2 rounded-2xl border border-slate-100 bg-slate-50 px-3 py-2.5 sm:w-auto sm:px-4 sm:py-2">
-          <div
-            className={`flex items-center gap-2 rounded-xl px-3 py-2 transition-all sm:px-3 sm:py-1.5 ${
-              step === 'customer' ? 'bg-white text-red-600 shadow-sm' : 'text-slate-400'
-            }`}
-          >
-            <ClipboardCheck className="h-5 w-5 sm:h-4 sm:w-4" />
-            <span className="text-sm font-black uppercase sm:text-xs">Khách hàng</span>
-          </div>
-          <div className="h-px w-4 bg-slate-200" />
-          <div
-            className={`flex items-center gap-2 rounded-xl px-3 py-2 transition-all sm:px-3 sm:py-1.5 ${
-              step === 'staff' ? 'bg-white text-red-600 shadow-sm' : 'text-slate-400'
-            }`}
-          >
-            <Users className="h-5 w-5 sm:h-4 sm:w-4" />
-            <span className="text-sm font-black uppercase sm:text-xs">Nhân viên</span>
-          </div>
-        </div>
+        ) : null}
       </div>
     </header>
   );

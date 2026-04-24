@@ -15,19 +15,19 @@ export const SALES_STAFF = [
 ];
 
 export const TECH_STAFF = [
-  'Phùng Thái Quân',
-  'Nguyễn Chí Linh',
-  'Nguyễn Văn Công',
-  'Trần Văn Lực',
-  'Nguyễn Ngọc Tuấn',
-  'Nguyễn Quang Hiếu',
   'Lăng Văn Biên',
-  'Trần Văn Hùng',
-  'Nguyễn Văn Tuấn',
-  'Nguyễn Quốc Lưu',
-  'Nguyễn Đình Bính',
+  'Nguyễn Văn Công',
+  'Nguyễn Quang Hiếu',
   'Lý Văn Hòa',
-  'Vũ Hồng Việt',
+  'Dương Văn Hùng',
+  'Trần Bá Hùng',
+  'Nguyễn Chí Linh',
+  'Trần Văn Lực',
+  'Nguyễn Quốc Lưu',
+  'Phùng Thái Quân',
+  'Nguyễn Ngọc Tuấn',
+  'Nguyễn Văn Tuấn',
+  ''
 ];
 
 export const EQUIPMENT_ITEMS = [

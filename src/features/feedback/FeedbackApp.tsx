@@ -40,8 +40,8 @@ export default function FeedbackApp() {
   } = useFeedbackForm();
 
   return (
-    <div className="min-h-screen bg-[#f8fafc] px-3 py-5 font-sans text-[17px] selection:bg-red-100 selection:text-red-900 sm:px-6 sm:py-8 sm:text-base">
-      <div className="mx-auto max-w-5xl">
+    <div className="min-h-screen bg-white px-3 py-5 text-[17px] selection:bg-red-100 selection:text-red-900 sm:px-6 sm:py-8 sm:text-base">
+      <div className="mx-auto max-w-4xl">
         <PageHeader step={step} />
 
         <main className="relative">
@@ -50,7 +50,7 @@ export default function FeedbackApp() {
               <motion.div
                 key="success-page"
                 animate={{ opacity: 1, x: 0 }}
-                className="relative flex min-h-[600px] flex-col items-center justify-center overflow-hidden rounded-[2.5rem] border border-slate-200 bg-white p-4 text-center shadow-2xl shadow-slate-200/50 sm:p-16"
+                className="relative flex min-h-[600px] flex-col items-center justify-center overflow-hidden border border-slate-300 bg-white p-4 text-center sm:p-16"
                 exit={{ opacity: 0, x: -20 }}
                 initial={{ opacity: 0, x: 20 }}
                 transition={{ duration: 0.3, ease: 'easeOut' }}
@@ -80,7 +80,7 @@ export default function FeedbackApp() {
               <motion.div
                 key="customer-page"
                 animate={{ opacity: 1, x: 0 }}
-                className="overflow-hidden rounded-[2.5rem] border border-slate-200 bg-white shadow-2xl shadow-slate-200/50"
+                className="overflow-hidden border border-slate-300 bg-white"
                 exit={{ opacity: 0, x: 20 }}
                 initial={{ opacity: 0, x: -20 }}
                 transition={{ duration: 0.3, ease: 'easeOut' }}
@@ -100,7 +100,7 @@ export default function FeedbackApp() {
               <motion.div
                 key="staff-page"
                 animate={{ opacity: 1, x: 0 }}
-                className="overflow-hidden rounded-[2.5rem] border border-slate-300 bg-[linear-gradient(180deg,_#f8fafc_0%,_#edf2f7_100%)] shadow-2xl shadow-slate-200/80"
+                className="overflow-hidden border border-slate-300 bg-[linear-gradient(180deg,_#ffffff_0%,_#f8fafc_100%)]"
                 exit={{ opacity: 0, x: -20 }}
                 initial={{ opacity: 0, x: 20 }}
                 transition={{ duration: 0.3, ease: 'easeOut' }}

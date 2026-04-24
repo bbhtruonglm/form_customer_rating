@@ -205,7 +205,7 @@ export default function StaffStep({
           <ChevronLeft className="h-5 w-5" /> Quay lại phản hồi
         </button>
         <div className="text-center sm:text-right">
-          <h2 className="text-3xl font-black uppercase italic tracking-tighter text-slate-900 sm:text-2xl">Nội bộ Trần Gia</h2>
+          <h2 className="text-3xl font-black uppercase tracking-tighter text-slate-900 sm:text-2xl">Nội bộ Trần Gia</h2>
           <p className="text-xs font-bold uppercase tracking-[0.18em] text-sky-600 sm:text-[10px] sm:tracking-[0.2em]">
             Management Dashboard
           </p>
