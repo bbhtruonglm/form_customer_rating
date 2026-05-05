@@ -35,7 +35,7 @@ export default function PageHeader({ step }: PageHeaderProps) {
 
         {step === 'customer' ? (
           <div className="mt-5 text-slate-900">
-            <p className="text-[1.3rem] font-bold leading-none tracking-[0.2em] sm:text-[1.5rem]">
+            <p className="text-[1.3rem] font-bold leading-none sm:text-[1.5rem]">
               ****************
             </p>
             <h1 className="mt-5 text-2xl font-bold leading-tight sm:text-[3rem]">
@@ -51,7 +51,7 @@ export default function PageHeader({ step }: PageHeaderProps) {
                 mong Quý khách hàng phản hồi xác nhận một số thông tin dưới đây!
               </p>
               <p>
-                Chúng tôi xin cam kết các thông tin hoàn này hoàn toàn được giữ bảo mật!
+                Chúng tôi xin cam kết các thông tin này hoàn toàn được giữ bảo mật!
               </p>
             </div>
           </div>

@@ -93,7 +93,7 @@ export default function SearchableMultiSelect({
           ) : (
             <span className="text-[13px] font-medium text-slate-400">{placeholder}</span>
           )}
-          <p className="mt-0.5 text-[11px] font-bold uppercase tracking-[0.08em] text-slate-400">
+          <p className="mt-0.5 text-[11px] font-bold uppercase text-slate-600">
             {selectedItems.length === 0
               ? 'Chưa chọn nhân sự'
               : `${selectedItems.length} nhân sự đã chọn`}

@@ -23,7 +23,7 @@ export default function ChipMultiSelect({
     <div className={`flex flex-col ${compact ? 'gap-2' : 'gap-3'}`}>
       {label ? (
         <label
-          className={`${compact ? 'text-[11px] tracking-[0.14em]' : 'text-xs tracking-[0.16em] sm:text-[10px] sm:tracking-[0.2em]'} font-black uppercase ${
+          className={`${compact ? 'text-[11px]' : 'text-xs sm:text-[10px]'} font-black uppercase ${
             isDark ? 'text-slate-500' : 'text-slate-400'
           }`}
         >
@@ -44,9 +44,7 @@ export default function ChipMultiSelect({
             <button
               key={item}
               className={`rounded-xl font-black uppercase transition-all duration-200 ${
-                compact
-                  ? 'px-3 py-1.5 text-[11px] tracking-[0.08em]'
-                  : 'px-4 py-2 text-xs tracking-[0.14em] sm:px-4 sm:py-1.5 sm:text-[10px] sm:tracking-wider'
+                compact ? 'px-3 py-1.5 text-[11px]' : 'px-4 py-2 text-xs sm:px-4 sm:py-1.5 sm:text-[10px]'
               } ${
                 isSelected
                   ? isDark

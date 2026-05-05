@@ -67,7 +67,7 @@ export default function FeedbackApp() {
                   </p>
                   <div className="pt-8">
                     <button
-                      className="rounded-full bg-sky-600 px-8 py-4 text-sm font-bold uppercase tracking-widest text-white shadow-lg shadow-sky-200 transition-all active:scale-95 hover:bg-sky-700"
+                      className="rounded-full bg-sky-600 px-8 py-4 text-sm font-bold uppercase text-white shadow-lg shadow-sky-200 transition-all active:scale-95 hover:bg-sky-700"
                       onClick={resetForm}
                       type="button"
                     >
@@ -126,12 +126,6 @@ export default function FeedbackApp() {
             )}
           </AnimatePresence>
         </main>
-
-        {/* <footer className="mt-10 text-center sm:mt-12">
-          <p className="text-xs font-black uppercase tracking-[0.28em] text-slate-400 sm:text-[10px] sm:tracking-[0.4em]">
-            © 2026 Công ty TNHH Sự kiện Trần Gia
-          </p>
-        </footer> */}
       </div>
 
       {/* Nút dev chỉ hiện trong môi trường development */}

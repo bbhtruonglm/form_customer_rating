@@ -23,7 +23,7 @@ export default function FormTextarea({
 }: FormTextareaProps) {
   return (
     <div className="flex flex-col gap-2.5">
-      <label className="text-base font-bold uppercase tracking-wide text-slate-700 sm:text-sm">
+      <label className="text-base font-bold uppercase text-slate-700 sm:text-sm">
         {label} {required && <span className="text-red-500">*</span>}
       </label>
       <textarea

@@ -378,7 +378,7 @@ export default function DateSelect({
           <span className={`block truncate text-[14px] font-semibold ${value ? 'text-slate-800' : 'text-slate-400'}`}>
             {formatDisplayDate(value) || placeholder}
           </span>
-          <p className="mt-0.5 text-[11px] font-bold uppercase tracking-[0.08em] text-slate-400">
+          <p className="mt-0.5 text-sm font-bold uppercase text-slate-600">
             {value ? 'Đã chọn thời gian' : 'Chưa chọn đủ thông tin'}
           </p>
         </>
@@ -400,7 +400,7 @@ export default function DateSelect({
             Ngày: {formatDisplayDate(value) || placeholder}
           </span>
           <span
-            className={`rounded-full border px-2.5 py-1 text-[12px] font-bold ${
+            className={`rounded-full border px-2.5 py-1 text-xs font-bold ${
               has_time_selected
                 ? 'border-sky-300 bg-sky-50 text-sky-700'
                 : 'border-amber-300 bg-amber-50 text-amber-700'
@@ -410,7 +410,7 @@ export default function DateSelect({
           </span>
         </div>
         <p
-          className={`mt-1 text-[11px] font-bold uppercase tracking-[0.08em] ${
+          className={`mt-1 text-[11px] font-bold uppercase ${
             has_complete_selection
               ? 'text-slate-400'
               : needs_time_attention
@@ -505,7 +505,7 @@ export default function DateSelect({
               </button>
             </div>
 
-            <div className="grid grid-cols-7 gap-1 text-center text-[11px] font-black uppercase tracking-[0.08em] text-slate-400">
+            <div className="grid grid-cols-7 gap-1 text-center text-[11px] font-black uppercase text-slate-400">
               {
                 // Duyệt qua mảng danh sách tên thứ
                 // Để render nhãn tiêu đề cho các cột của lịch
