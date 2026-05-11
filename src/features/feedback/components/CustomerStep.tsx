@@ -72,32 +72,36 @@ export default function CustomerStep({
           </div>
           <FormInput
             disabled={isCustomerConfirmed}
-            label="Ông (Bà)"
+            label="I.1 Ông (Bà)"
             name="customerName"
             onChange={onInputChange}
+            placeholder="Nhập tên khách hàng..."
             required
             value={formData.customerName}
           />
           <FormInput
             disabled={isCustomerConfirmed}
-            label="Số điện thoại"
+            label="I.2 Số điện thoại"
             name="phoneNumber"
             onChange={onInputChange}
+            placeholder="Nhập số điện thoại..."
             required
             value={formData.phoneNumber}
           />
           <FormInput
             disabled={isCustomerConfirmed}
-            label="Chức vụ"
+            label="I.3 Chức vụ"
             name="position"
             onChange={onInputChange}
+            placeholder="Nhập chức vụ..."
             value={formData.position}
           />
           <FormInput
             disabled={isCustomerConfirmed}
-            label="Email"
+            label="I.4 Email"
             name="email"
             onChange={onInputChange}
+            placeholder="Nhập email..."
             required
             type="email"
             value={formData.email}
@@ -105,9 +109,10 @@ export default function CustomerStep({
           <div className="md:col-span-2">
             <FormInput
               disabled={isCustomerConfirmed}
-              label="Đơn vị"
+              label="I.5 Đơn vị"
               name="organization"
               onChange={onInputChange}
+              placeholder="Nhập đơn vị..."
               value={formData.organization}
             />
           </div>
@@ -120,9 +125,10 @@ export default function CustomerStep({
           <div className="md:col-span-2">
             <FormInput
               disabled={isCustomerConfirmed}
-              label="Tên sự kiện"
+              label="II.1 Tên sự kiện"
               name="eventName"
               onChange={onInputChange}
+              placeholder="Nhập tên sự kiện..."
               required
               value={formData.eventName}
             />
@@ -130,26 +136,26 @@ export default function CustomerStep({
           <div className="md:col-span-2 grid grid-cols-1 gap-4 md:grid-cols-2">
             <div className="flex flex-col gap-2.5">
               <label className="text-base font-bold uppercase text-slate-700 sm:text-sm">
-                Từ ngày <span className="text-red-500">*</span>
+                II.2 Thời gian bắt đầu chương trình <span className="text-red-500">*</span>
               </label>
               <DateSelect
                 name="eventStartDate"
                 nameTime="eventStartTime"
                 onChange={onInputChange}
-                placeholder="Chọn từ ngày"
+                placeholder="Chọn ngày bắt đầu chương trình"
                 value={formData.eventStartDate}
                 valueTime={formData.eventStartTime}
               />
             </div>
             <div className="flex flex-col gap-2.5">
               <label className="text-base font-bold uppercase text-slate-700 sm:text-sm">
-                Đến ngày <span className="text-red-500">*</span>
+                II.3 Thời gian kết thúc chương trình <span className="text-red-500">*</span>
               </label>
               <DateSelect
                 name="eventEndDate"
                 nameTime="eventEndTime"
                 onChange={onInputChange}
-                placeholder="Chọn đến ngày"
+                placeholder="Chọn ngày kết thúc chương trình"
                 value={formData.eventEndDate}
                 valueTime={formData.eventEndTime}
               />
@@ -158,7 +164,7 @@ export default function CustomerStep({
           <div className="md:col-span-2">
             <FormTextarea
               disabled={isCustomerConfirmed}
-              label="Địa điểm"
+              label="II.4 Địa điểm"
               name="location"
               onChange={onInputChange}
               placeholder="Nhập địa điểm tổ chức sự kiện..."
@@ -168,7 +174,7 @@ export default function CustomerStep({
           </div>
           <div className="md:col-span-2">
             <label className="mb-4 block text-base font-bold uppercase text-slate-700 sm:text-sm">
-              Hạng mục thiết bị sử dụng
+              II.5 Hạng mục thiết bị sử dụng
             </label>
             <ChipMultiSelect
               disabled={isCustomerConfirmed}
@@ -179,7 +185,7 @@ export default function CustomerStep({
             <div className="mt-4">
               <FormInput
                 disabled={isCustomerConfirmed}
-                label="Hạng mục khác"
+                label="II.6 Hạng mục khác"
                 name="otherEquipment"
                 onChange={onInputChange}
                 placeholder="Nhập hạng mục khác bằng tay..."
@@ -195,7 +201,7 @@ export default function CustomerStep({
         <div className="space-y-8">
           <div className="flex flex-col gap-3">
             <label className="text-base font-bold uppercase text-slate-700 sm:text-sm">
-              Chất lượng thiết bị - dịch vụ <span className="text-red-500">*</span>
+              III.1 Chất lượng thiết bị - dịch vụ <span className="text-red-500">*</span>
             </label>
             <textarea
               className="min-h-36 resize-none rounded-2xl border border-slate-200 px-5 py-4 text-base outline-none transition-all focus:border-sky-500 focus:ring-4 focus:ring-sky-100 disabled:bg-slate-50 disabled:text-slate-400 sm:min-h-0"
@@ -209,7 +215,7 @@ export default function CustomerStep({
           </div>
           <div className="flex flex-col gap-3">
             <label className="text-base font-bold uppercase text-slate-700 sm:text-sm">
-              Thái độ phục vụ của kỹ thuật viên <span className="text-red-500">*</span>
+              III.2 Thái độ phục vụ của kỹ thuật viên <span className="text-red-500">*</span>
             </label>
             <textarea
               className="min-h-36 resize-none rounded-2xl border border-slate-200 px-5 py-4 text-base outline-none transition-all focus:border-sky-500 focus:ring-4 focus:ring-sky-100 disabled:bg-slate-50 disabled:text-slate-400 sm:min-h-0"
@@ -253,17 +259,22 @@ export default function CustomerStep({
         </motion.div>
       ) : null}
 
-      <div className="flex justify-center pt-4 sm:pt-6">
-        <button
-          className="group flex w-full items-center justify-center gap-4 rounded-xl bg-red-600 px-4 py-3 text-base font-black uppercase  text-white shadow-xl shadow-red-200 transition-all active:scale-95 hover:bg-red-700 md:rounded-4xl md:px-8 md:py-5 sm:w-auto "
-          disabled={isGeneratingLookupCode}
-          onClick={onConfirm}
-          type="button"
-        >
-          <CheckCircle2 className="h-7 w-7" />
-          {isGeneratingLookupCode ? 'Đang tạo mã tra cứu...' : 'Xác nhận & Chuyển tiếp'}
-          <ArrowRight className="h-6 w-6 transition-transform group-hover:translate-x-1" />
-        </button>
+      <div className="space-y-3 pt-4 text-center sm:space-y-4 sm:pt-6">
+        <p className="text-base font-black uppercase tracking-[0.08em] text-slate-800 sm:text-lg">
+          Trần Gia trân trọng cảm ơn!
+        </p>
+        <div className="flex justify-center">
+          <button
+            className="group flex w-full items-center justify-center gap-4 rounded-xl bg-red-600 px-4 py-3 text-base font-black uppercase  text-white shadow-xl shadow-red-200 transition-all active:scale-95 hover:bg-red-700 md:rounded-4xl md:px-8 md:py-5 sm:w-auto "
+            disabled={isGeneratingLookupCode}
+            onClick={onConfirm}
+            type="button"
+          >
+            <CheckCircle2 className="h-7 w-7" />
+            {isGeneratingLookupCode ? 'Đang tạo mã tra cứu...' : 'Xác nhận & Chuyển tiếp'}
+            <ArrowRight className="h-6 w-6 transition-transform group-hover:translate-x-1" />
+          </button>
+        </div>
       </div>
     </div>
   );

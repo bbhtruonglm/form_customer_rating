@@ -147,12 +147,25 @@ export default function StaffStep({
   const getExcludedNestedStaff = (
     section: NestedStaffSectionKey,
     subSection: string,
+    currentEntry: StaffEntry,
   ) => {
     const sectionEntries = formData[section] as unknown as Record<string, StaffEntry[]>;
 
     return Object.entries(sectionEntries)
-      .filter(([key]) => key !== subSection)
-      .flatMap(([, entries]) => entries.flatMap((entry) => entry.staffIds));
+      .flatMap(([key, entries]) =>
+        entries.filter((entry) => {
+          if (entry.id === currentEntry.id && key === subSection) {
+            return false;
+          }
+
+          if (currentEntry.date) {
+            return entry.date === currentEntry.date;
+          }
+
+          return entry.id === currentEntry.id && key !== subSection;
+        }),
+      )
+      .flatMap((entry) => entry.staffIds);
   };
 
   const getAvailableStaff = (entry: StaffEntry, excludedStaff: string[]) =>
@@ -185,7 +198,7 @@ export default function StaffStep({
     }));
 
   const handleSingleSelectChange =
-    (field: 'salesInCharge' | 'techInCharge') => (value: string) => {
+    (field: 'salesInCharge' | 'techTicketCreator' | 'techInCharge') => (value: string) => {
       onInputChange({
         target: {
           name: field,
@@ -211,18 +224,33 @@ export default function StaffStep({
       </div>
 
       <div className="grid grid-cols-1 gap-2.5 md:grid-cols-2">
-        <div className="flex flex-col gap-2">
-          <label className="text-sm font-black uppercase text-black sm:text-[10px]">
-            Kinh doanh phụ trách
-          </label>
-          <SearchableSingleSelect
-            items={SALES_STAFF}
-            onSelect={handleSingleSelectChange('salesInCharge')}
-            placeholder="Chọn nhân viên kinh doanh"
-            searchPlaceholder="Tìm nhân viên kinh doanh..."
-            value={formData.salesInCharge}
-            variant="staff"
-          />
+        <div className="flex flex-col gap-2.5">
+          <div className="flex flex-col gap-2">
+            <label className="text-sm font-black uppercase text-black sm:text-[10px]">
+              Kinh doanh phụ trách
+            </label>
+            <SearchableSingleSelect
+              items={SALES_STAFF}
+              onSelect={handleSingleSelectChange('salesInCharge')}
+              placeholder="Chọn nhân viên kinh doanh"
+              searchPlaceholder="Tìm nhân viên kinh doanh..."
+              value={formData.salesInCharge}
+              variant="staff"
+            />
+          </div>
+          <div className="flex flex-col gap-2">
+            <label className="text-sm font-black uppercase text-black sm:text-[10px]">
+              Kỹ thuật tạo phiếu
+            </label>
+            <SearchableSingleSelect
+              items={TECH_STAFF}
+              onSelect={handleSingleSelectChange('techTicketCreator')}
+              placeholder="Chọn kỹ thuật tạo phiếu"
+              searchPlaceholder="Tìm kỹ thuật tạo phiếu..."
+              value={formData.techTicketCreator}
+              variant="staff"
+            />
+          </div>
         </div>
         <div className="flex flex-col gap-2">
           <label className="text-sm font-black uppercase text-black sm:text-[10px]">
@@ -242,7 +270,9 @@ export default function StaffStep({
       <div className="space-y-3">
         <div className="flex items-center gap-3">
           <div className="h-px flex-1 bg-slate-300" />
-          <h3 className="text-sm font-black uppercase text-slate-900 sm:text-xs ">Nhân sự tham gia</h3>
+          <h3 className="text-sm font-black uppercase text-slate-900 sm:text-xs ">
+            Nhân sự tham gia phục vụ sự kiện
+          </h3>
           <div className="h-px flex-1 bg-slate-300" />
         </div>
 
@@ -283,9 +313,13 @@ export default function StaffStep({
                       </button>
                     ) : null}
                   </div>
-                  <div className="grid grid-cols-1 gap-2.5 lg:grid-cols-2">
+                    <div className="grid grid-cols-1 gap-2.5 lg:grid-cols-2">
                     {group.items.map(({ config, entry }) => {
-                      const excludedStaff = getExcludedNestedStaff(config.section, config.subSection);
+                      const excludedStaff = getExcludedNestedStaff(
+                        config.section,
+                        config.subSection,
+                        entry,
+                      );
                       const availableStaff = getAvailableStaff(entry, excludedStaff);
                       const Icon = config.icon;
 
@@ -348,7 +382,11 @@ export default function StaffStep({
                   </div>
                   <div className="grid grid-cols-1 gap-2.5 lg:grid-cols-3">
                     {group.items.map(({ config, entry }) => {
-                      const excludedStaff = getExcludedNestedStaff(config.section, config.subSection);
+                      const excludedStaff = getExcludedNestedStaff(
+                        config.section,
+                        config.subSection,
+                        entry,
+                      );
                       const availableStaff = getAvailableStaff(entry, excludedStaff);
                       const Icon = config.icon;
 

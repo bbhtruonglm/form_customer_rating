@@ -10,6 +10,9 @@ const GOOGLE_FORM_STATIC_FIELDS = {
   pageHistory: '0',
 } as const;
 
+// Cần thay bằng entry id thật của câu hỏi "KỸ THUẬT TẠO PHIẾU" trên Google Form
+const GOOGLE_FORM_TECH_TICKET_CREATOR_ENTRY_ID = '';
+
 function formatDate(value: string) {
   if (!value) return '';
   const [year, month, day] = value.split('-');
@@ -81,6 +84,9 @@ function buildGoogleFormPayload(formData: FeedbackFormData) {
 
   // === STAFF INFO ===
   payload.set('entry.1900880307', formData.salesInCharge);
+  if (GOOGLE_FORM_TECH_TICKET_CREATOR_ENTRY_ID) {
+    payload.set(GOOGLE_FORM_TECH_TICKET_CREATOR_ENTRY_ID, formData.techTicketCreator);
+  }
   payload.set('entry.1777249788', formData.techInCharge);
 
   // Warehouse Prep

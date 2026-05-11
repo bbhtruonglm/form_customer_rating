@@ -1,4 +1,17 @@
 const LOOKUP_CODE_ENDPOINT = 'https://redis-counter-nine.vercel.app/api/generate-code';
+const LOOKUP_CODE_PREFIX = 'TG';
+const LOOKUP_CODE_REQUEST_TIMEOUT_MS = 6000;
+
+function generateLocalLookupCode() {
+  const now = new Date();
+  const year = String(now.getFullYear()).slice(-2);
+  const month = String(now.getMonth() + 1).padStart(2, '0');
+  const day = String(now.getDate()).padStart(2, '0');
+  const time = `${String(now.getHours()).padStart(2, '0')}${String(now.getMinutes()).padStart(2, '0')}`;
+  const random = Math.random().toString(36).slice(2, 6).toUpperCase();
+
+  return `${LOOKUP_CODE_PREFIX}${year}${month}${day}${time}${random}`;
+}
 
 function extractLookupCode(payload: unknown): string | null {
   if (typeof payload === 'string') {
@@ -38,26 +51,36 @@ function extractLookupCode(payload: unknown): string | null {
 }
 
 export async function generateLookupCode() {
-  const response = await fetch(LOOKUP_CODE_ENDPOINT, {
-    headers: {
-      Accept: 'application/json, text/plain, */*',
-    },
-    method: 'GET',
-  });
+  try {
+    const controller = new AbortController();
+    const timeout = window.setTimeout(() => controller.abort(), LOOKUP_CODE_REQUEST_TIMEOUT_MS);
 
-  if (!response.ok) {
-    throw new Error(`API tạo mã trả về lỗi ${response.status}.`);
+    const response = await fetch(LOOKUP_CODE_ENDPOINT, {
+      headers: {
+        Accept: 'application/json, text/plain, */*',
+      },
+      method: 'GET',
+      signal: controller.signal,
+    });
+
+    window.clearTimeout(timeout);
+
+    if (!response.ok) {
+      throw new Error(`API tạo mã trả về lỗi ${response.status}.`);
+    }
+
+    const contentType = response.headers.get('content-type') ?? '';
+    const payload = contentType.includes('application/json')
+      ? await response.json()
+      : await response.text();
+    const lookupCode = extractLookupCode(payload);
+
+    if (!lookupCode) {
+      throw new Error('Không đọc được Mã tra cứu từ API.');
+    }
+
+    return lookupCode;
+  } catch {
+    return generateLocalLookupCode();
   }
-
-  const contentType = response.headers.get('content-type') ?? '';
-  const payload = contentType.includes('application/json')
-    ? await response.json()
-    : await response.text();
-  const lookupCode = extractLookupCode(payload);
-
-  if (!lookupCode) {
-    throw new Error('Không đọc được Mã tra cứu từ API.');
-  }
-
-  return lookupCode;
 }

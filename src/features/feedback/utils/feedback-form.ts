@@ -37,6 +37,7 @@ export function createInitialFormData(): FeedbackFormData {
     serviceQuality: '',
     staffAttitude: '',
     salesInCharge: '',
+    techTicketCreator: '',
     techInCharge: '',
     warehousePrep: {
       level1: [createStaffEntry('warehouse-prep-group-1')],
@@ -61,26 +62,49 @@ export function toggleSelection(items: string[], value: string) {
   return items.includes(value) ? items.filter((item) => item !== value) : [...items, value];
 }
 
+function hasValue(value: string) {
+  return value.trim().length > 0;
+}
+
+function buildEventDateTime(date: string, time: string) {
+  if (!date) return null;
+
+  return new Date(`${date}T${time || '00:00'}`);
+}
+
 export function validateCustomerForm(formData: FeedbackFormData) {
   const errors: string[] = [];
 
-  if (!formData.customerName) errors.push('Vui lòng nhập tên khách hàng');
-  if (!formData.phoneNumber) errors.push('Vui lòng nhập số điện thoại');
-  if (!formData.email) errors.push('Vui lòng nhập email');
-  if (!formData.eventName) errors.push('Vui lòng nhập tên sự kiện');
-  if (!formData.eventStartDate) errors.push('Vui lòng chọn từ ngày tổ chức');
-  if (!formData.eventStartTime) errors.push('Vui lòng chọn giờ bắt đầu');
-  if (!formData.eventEndDate) errors.push('Vui lòng chọn đến ngày tổ chức');
-  if (!formData.eventEndTime) errors.push('Vui lòng chọn giờ kết thúc');
+  if (!hasValue(formData.customerName)) errors.push('Vui lòng nhập tên khách hàng (I.1)');
+  if (!hasValue(formData.phoneNumber)) errors.push('Vui lòng nhập số điện thoại (I.2)');
+  if (!hasValue(formData.email)) errors.push('Vui lòng nhập email (I.4)');
+  if (!hasValue(formData.eventName)) errors.push('Vui lòng nhập tên sự kiện (II.1)');
+  if (!hasValue(formData.eventStartDate)) {
+    errors.push('Vui lòng chọn ngày bắt đầu chương trình (II.2)');
+  }
+  if (!hasValue(formData.eventStartTime)) {
+    errors.push('Vui lòng chọn giờ bắt đầu chương trình (II.2)');
+  }
+  if (!hasValue(formData.eventEndDate)) {
+    errors.push('Vui lòng chọn ngày kết thúc chương trình (II.3)');
+  }
+  if (!hasValue(formData.eventEndTime)) {
+    errors.push('Vui lòng chọn giờ kết thúc chương trình (II.3)');
+  }
   if (
     formData.eventStartDate &&
     formData.eventEndDate &&
-    formData.eventStartDate > formData.eventEndDate
+    buildEventDateTime(formData.eventStartDate, formData.eventStartTime) >
+      buildEventDateTime(formData.eventEndDate, formData.eventEndTime)
   ) {
-    errors.push('Đến ngày phải lớn hơn hoặc bằng từ ngày');
+    errors.push('Thời gian kết thúc chương trình phải sau hoặc bằng thời gian bắt đầu chương trình');
   }
-  if (!formData.serviceQuality) errors.push('Vui lòng đánh giá chất lượng dịch vụ');
-  if (!formData.staffAttitude) errors.push('Vui lòng đánh giá thái độ nhân viên');
+  if (!hasValue(formData.serviceQuality)) {
+    errors.push('Vui lòng đánh giá chất lượng thiết bị - dịch vụ (III.1)');
+  }
+  if (!hasValue(formData.staffAttitude)) {
+    errors.push('Vui lòng đánh giá thái độ phục vụ của kỹ thuật viên (III.2)');
+  }
 
   return errors;
 }

@@ -40,6 +40,7 @@ export interface FeedbackFormData {
   serviceQuality: string;
   staffAttitude: string;
   salesInCharge: string;
+  techTicketCreator: string;
   techInCharge: string;
   warehousePrep: WarehousePrepAssignments;
   installation: InstallationAssignments;
@@ -71,6 +72,7 @@ export type FeedbackTextField =
   | 'serviceQuality'
   | 'staffAttitude'
   | 'salesInCharge'
+  | 'techTicketCreator'
   | 'techInCharge'
   | 'otherInfo';
 

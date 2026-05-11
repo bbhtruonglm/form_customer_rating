@@ -39,6 +39,7 @@ export const MOCK_FORM_DATA: FeedbackFormData = {
 
   // Nhân sự phụ trách
   salesInCharge: 'Đinh Thị Sợi',
+  techTicketCreator: 'Nguyễn Chí Linh',
   techInCharge: 'Phùng Thái Quân',
 
   // Chuẩn bị kho
@@ -155,6 +156,7 @@ export const MOCK_FORM_DATA_2: FeedbackFormData = {
   serviceQuality: 'Xuất sắc',
   staffAttitude: 'Xuất sắc',
   salesInCharge: 'Bùi Thị Thu Hương',
+  techTicketCreator: 'Phùng Thái Quân',
   techInCharge: 'Nguyễn Chí Linh',
 
   warehousePrep: {

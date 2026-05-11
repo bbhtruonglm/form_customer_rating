@@ -91,13 +91,13 @@ export const NESTED_STAFF_SECTIONS: NestedStaffSectionConfig[] = [
   {
     section: 'installation',
     subSection: 'level1',
-    label: 'Lắp đặt - Mức 1 (06h - 23h)',
+    label: 'Lắp đặt - Mức 1 (05H - 23H cùng ngày)',
     icon: Briefcase,
   },
   {
     section: 'installation',
     subSection: 'level2',
-    label: 'Lắp đặt - Mức 2 (23h hôm nay - 5h hôm sau)',
+    label: 'Lắp đặt - Mức 2 (23H hôm nay - 5H sáng hôm sau)',
     icon: Briefcase,
   },
   {
@@ -112,7 +112,7 @@ export const SIMPLE_STAFF_SECTIONS: SimpleStaffSectionConfig[] = [
   { key: 'overnightGuard', label: 'Trông đồ đêm' },
   { key: 'programDuty', label: 'Trực chương trình' },
   { key: 'truckSupport', label: 'Hỗ trợ lái xe tải' },
-  { key: 'motorbikeTravel30To50', label: 'Xe máy di chuyển 30 - 50km' },
-  { key: 'motorbikeTravelOver50', label: 'Xe máy di chuyển trên 50km' },
+  { key: 'motorbikeTravel30To50', label: 'Di chuyển bằng xe máy 30-50km' },
+  { key: 'motorbikeTravelOver50', label: 'Di chuyển bằng xe máy trên 50km' },
   { key: 'parking', label: 'Gửi xe' },
 ];

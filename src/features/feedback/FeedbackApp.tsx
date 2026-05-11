@@ -63,7 +63,7 @@ export default function FeedbackApp() {
                     Những ý kiến đóng góp của Quý khách sẽ giúp chúng tôi cải thiện <br className="hidden md:block" /> dịch vụ ngày càng tốt hơn.
                   </p>
                   <p className="text-xl font-black leading-relaxed text-slate-800 md:text-2xl">
-                    Kính chúc Quý khách sức khỏe và nhiều thành công!
+                    TRẦN GIA TRÂN TRỌNG CẢM ƠN!
                   </p>
                   <div className="pt-8">
                     <button
