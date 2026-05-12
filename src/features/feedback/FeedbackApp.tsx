@@ -50,22 +50,22 @@ export default function FeedbackApp() {
               <motion.div
                 key="success-page"
                 animate={{ opacity: 1, x: 0 }}
-                className="relative flex min-h-[600px] flex-col items-center justify-center overflow-hidden border border-slate-300 bg-white p-4 text-center sm:p-16"
+                className="relative flex min-h-[600px] flex-col items-center justify-center overflow-hidden border border-slate-300 bg-white p-2 text-center"
                 exit={{ opacity: 0, x: -20 }}
                 initial={{ opacity: 0, x: 20 }}
                 transition={{ duration: 0.3, ease: 'easeOut' }}
               >
-                <div className="relative z-10 max-w-4xl space-y-10 rounded-3xl bg-white/70 px-4 py-8 backdrop-blur-sm sm:p-12">
-                  <h2 className="text-xl font-black uppercase leading-relaxed text-slate-800 md:text-2xl">
+                <div className="relative z-10 max-w-4xl space-y-10 rounded-3xl bg-white/70  py-8 backdrop-blur-sm">
+                  {/* <h2 className="text-xl font-black uppercase leading-relaxed text-slate-800 md:text-2xl">
                     Công ty TNHH Sự kiện Trần Gia xin chân thành cảm ơn Quý khách <br className="hidden md:block" /> đã phản hồi đánh giá.
                   </h2>
                   <p className="text-lg font-bold leading-relaxed text-slate-800 md:text-xl">
                     Những ý kiến đóng góp của Quý khách sẽ giúp chúng tôi cải thiện <br className="hidden md:block" /> dịch vụ ngày càng tốt hơn.
-                  </p>
-                  <p className="text-xl font-black leading-relaxed text-slate-800 md:text-2xl">
+                  </p> */}
+                  <p className="text-lg font-black leading-relaxed text-slate-800 md:text-2xl">
                     TRẦN GIA TRÂN TRỌNG CẢM ƠN!
                   </p>
-                  <div className="pt-8">
+                  <div className="">
                     <button
                       className="rounded-full bg-sky-600 px-8 py-4 text-sm font-bold uppercase text-white shadow-lg shadow-sky-200 transition-all active:scale-95 hover:bg-sky-700"
                       onClick={resetForm}
