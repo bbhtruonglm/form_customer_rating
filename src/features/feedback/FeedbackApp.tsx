@@ -50,7 +50,7 @@ export default function FeedbackApp() {
               <motion.div
                 key="success-page"
                 animate={{ opacity: 1, x: 0 }}
-                className="relative flex min-h-[600px] flex-col items-center justify-center overflow-hidden border border-slate-300 bg-white p-2 text-center"
+                className="relative flex min-h-[600px] flex-col items-center overflow-hidden border border-slate-300 bg-white p-2 text-center"
                 exit={{ opacity: 0, x: -20 }}
                 initial={{ opacity: 0, x: 20 }}
                 transition={{ duration: 0.3, ease: 'easeOut' }}
