@@ -27,7 +27,6 @@ export const TECH_STAFF = [
   'Phùng Thái Quân',
   'Nguyễn Ngọc Tuấn',
   'Nguyễn Văn Tuấn',
-  ''
 ];
 
 export const EQUIPMENT_ITEMS = [
@@ -103,7 +102,7 @@ export const NESTED_STAFF_SECTIONS: NestedStaffSectionConfig[] = [
   {
     section: 'installation',
     subSection: 'level3',
-    label: 'Lắp đặt - Mức 3 (8h sáng hôm nay - 5h sáng hôm sau)',
+    label: 'LẮP ĐẶT - MỨC  3 (05H SÁNG HÔM NAY - 05H SÁNG HÔM SAU)',
     icon: Briefcase,
   },
 ];

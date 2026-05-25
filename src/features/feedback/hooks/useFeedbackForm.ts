@@ -9,6 +9,7 @@ import type {
   NestedStaffSubSectionMap,
   SimpleStaffSectionKey,
   StaffEntry,
+  TechInChargeLevel,
 } from '@/features/feedback/types';
 import { generateLookupCode } from '@/features/feedback/services/lookup-code';
 import { submitFeedbackToGoogleForm } from '@/features/feedback/services/google-form-submit';
@@ -63,6 +64,19 @@ export function useFeedbackForm() {
     SET_FORM_DATA((previous) => ({
       ...previous,
       [field]: value,
+    }));
+  }
+
+  function updateTechInCharge(level: TechInChargeLevel, value: string) {
+    SET_FORM_DATA((previous) => ({
+      ...previous,
+      techInCharge: {
+        ...previous.techInCharge,
+        [level]: value,
+        [level === 'level1' ? 'level2' : 'level1']: value
+          ? ''
+          : previous.techInCharge[level === 'level1' ? 'level2' : 'level1'],
+      },
     }));
   }
 
@@ -246,6 +260,8 @@ export function useFeedbackForm() {
     id: string,
     staff_name: string,
   ) {
+    if (!staff_name.trim()) return;
+
     /** Tìm kiếm bản ghi nhân sự cần tác động */
     const TARGET_ENTRY = FORM_DATA[section][sub_section].find((entry) => entry.id === id);
 
@@ -260,6 +276,8 @@ export function useFeedbackForm() {
    * Tại sao: Đồng nhất logic thao tác staffIds cho mọi loại section.
    */
   function toggleSimpleStaffMember(section: SimpleStaffSectionKey, id: string, staff_name: string) {
+    if (!staff_name.trim()) return;
+
     /** Tìm kiếm bản ghi nhân sự mục tiêu */
     const TARGET_ENTRY = FORM_DATA[section].find((entry) => entry.id === id);
 
@@ -443,6 +461,7 @@ export function useFeedbackForm() {
     updateNestedStaffEntry,
     updateNestedSharedDate,
     updateSimpleStaffEntry,
+    updateTechInCharge,
     updateTextField,
   };
 }

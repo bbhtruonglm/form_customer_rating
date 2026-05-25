@@ -17,6 +17,11 @@ export interface InstallationAssignments {
   level3: StaffEntry[];
 }
 
+export interface TechInChargeAssignments {
+  level1: string;
+  level2: string;
+}
+
 export interface NestedStaffSections {
   warehousePrep: WarehousePrepAssignments;
   installation: InstallationAssignments;
@@ -41,7 +46,7 @@ export interface FeedbackFormData {
   staffAttitude: string;
   salesInCharge: string;
   techTicketCreator: string;
-  techInCharge: string;
+  techInCharge: TechInChargeAssignments;
   warehousePrep: WarehousePrepAssignments;
   installation: InstallationAssignments;
   overnightGuard: StaffEntry[];
@@ -73,10 +78,10 @@ export type FeedbackTextField =
   | 'staffAttitude'
   | 'salesInCharge'
   | 'techTicketCreator'
-  | 'techInCharge'
   | 'otherInfo';
 
 export type NestedStaffSectionKey = keyof NestedStaffSections;
+export type TechInChargeLevel = keyof TechInChargeAssignments;
 export interface NestedStaffSubSectionMap {
   warehousePrep: keyof WarehousePrepAssignments;
   installation: keyof InstallationAssignments;

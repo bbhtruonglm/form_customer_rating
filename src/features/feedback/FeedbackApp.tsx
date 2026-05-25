@@ -37,6 +37,7 @@ export default function FeedbackApp() {
     toggleSimpleStaffMember,
     updateNestedSharedDate,
     updateSimpleStaffEntry,
+    updateTechInCharge,
   } = useFeedbackForm();
 
   return (
@@ -120,6 +121,7 @@ export default function FeedbackApp() {
                   onToggleNestedStaff={toggleNestedStaffMember}
                   onToggleSimpleStaff={toggleSimpleStaffMember}
                   onUpdateNestedDate={updateNestedSharedDate}
+                  onUpdateTechInCharge={updateTechInCharge}
                   onUpdateSimpleEntry={updateSimpleStaffEntry}
                 />
               </motion.div>

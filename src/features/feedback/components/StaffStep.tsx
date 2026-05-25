@@ -16,6 +16,7 @@ import type {
   NestedStaffSubSectionMap,
   SimpleStaffSectionKey,
   StaffEntry,
+  TechInChargeLevel,
 } from '@/features/feedback/types';
 
 interface StaffStepProps {
@@ -42,6 +43,7 @@ interface StaffStepProps {
     id: string,
     value: string,
   ) => void;
+  onUpdateTechInCharge: (level: TechInChargeLevel, value: string) => void;
   onUpdateSimpleEntry: (
     section: SimpleStaffSectionKey,
     id: string,
@@ -133,6 +135,7 @@ export default function StaffStep({
   onToggleNestedStaff,
   onToggleSimpleStaff,
   onUpdateNestedDate,
+  onUpdateTechInCharge,
   onUpdateSimpleEntry,
   saveError,
   saveSuccessMessage,
@@ -198,7 +201,7 @@ export default function StaffStep({
     }));
 
   const handleSingleSelectChange =
-    (field: 'salesInCharge' | 'techTicketCreator' | 'techInCharge') => (value: string) => {
+    (field: 'salesInCharge' | 'techTicketCreator') => (value: string) => {
       onInputChange({
         target: {
           name: field,
@@ -206,6 +209,10 @@ export default function StaffStep({
         },
       } as ChangeEvent<HTMLSelectElement>);
     };
+
+  const handleTechInChargeChange = (level: TechInChargeLevel) => (value: string) => {
+    onUpdateTechInCharge(level, value);
+  };
 
   return (
     <div className="space-y-3 px-1 py-1.5 sm:space-y-4 sm:px-2 sm:py-2">
@@ -256,14 +263,34 @@ export default function StaffStep({
           <label className="text-sm font-black uppercase text-black sm:text-[10px]">
             Kỹ thuật phụ trách
           </label>
-          <SearchableSingleSelect
-            items={TECH_STAFF}
-            onSelect={handleSingleSelectChange('techInCharge')}
-            placeholder="Chọn nhân viên kỹ thuật"
-            searchPlaceholder="Tìm nhân viên kỹ thuật..."
-            value={formData.techInCharge}
-            variant="staff"
-          />
+          <div className="space-y-2 rounded-2xl border border-slate-200 bg-slate-50/70 p-2.5">
+            <div className="space-y-1.5">
+              <p className="text-[12px] font-black uppercase text-slate-800">
+                Mức 1 (Lắp đặt và chạy chương trình từ 2 ngày trở xuống)
+              </p>
+              <SearchableSingleSelect
+                items={TECH_STAFF}
+                onSelect={handleTechInChargeChange('level1')}
+                placeholder="Chọn kỹ thuật phụ trách mức 1"
+                searchPlaceholder="Tìm kỹ thuật phụ trách..."
+                value={formData.techInCharge.level1}
+                variant="staff"
+              />
+            </div>
+            <div className="space-y-1.5">
+              <p className="text-[12px] font-black uppercase text-slate-800">
+                Mức 2 (Lắp đặt và chạy chương trình từ 3 ngày trở lên)
+              </p>
+              <SearchableSingleSelect
+                items={TECH_STAFF}
+                onSelect={handleTechInChargeChange('level2')}
+                placeholder="Chọn kỹ thuật phụ trách mức 2"
+                searchPlaceholder="Tìm kỹ thuật phụ trách..."
+                value={formData.techInCharge.level2}
+                variant="staff"
+              />
+            </div>
+          </div>
         </div>
       </div>
 

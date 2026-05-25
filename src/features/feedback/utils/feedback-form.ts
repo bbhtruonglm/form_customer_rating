@@ -38,7 +38,10 @@ export function createInitialFormData(): FeedbackFormData {
     staffAttitude: '',
     salesInCharge: '',
     techTicketCreator: '',
-    techInCharge: '',
+    techInCharge: {
+      level1: '',
+      level2: '',
+    },
     warehousePrep: {
       level1: [createStaffEntry('warehouse-prep-group-1')],
       level2: [createStaffEntry('warehouse-prep-group-1')],
@@ -90,6 +93,9 @@ export function validateCustomerForm(formData: FeedbackFormData) {
   }
   if (!hasValue(formData.eventEndTime)) {
     errors.push('Vui lòng chọn giờ kết thúc chương trình (II.3)');
+  }
+  if (!hasValue(formData.location)) {
+    errors.push('Vui lòng nhập địa điểm (II.4)');
   }
   if (
     formData.eventStartDate &&

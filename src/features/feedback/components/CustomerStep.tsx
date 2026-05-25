@@ -168,6 +168,7 @@ export default function CustomerStep({
               name="location"
               onChange={onInputChange}
               placeholder="Nhập địa điểm tổ chức sự kiện..."
+              required
               rows={4}
               value={formData.location}
             />

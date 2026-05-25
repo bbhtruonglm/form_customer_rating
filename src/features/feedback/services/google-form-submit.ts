@@ -10,8 +10,7 @@ const GOOGLE_FORM_STATIC_FIELDS = {
   pageHistory: '0',
 } as const;
 
-// Cần thay bằng entry id thật của câu hỏi "KỸ THUẬT TẠO PHIẾU" trên Google Form
-const GOOGLE_FORM_TECH_TICKET_CREATOR_ENTRY_ID = '';
+const GOOGLE_FORM_TECH_TICKET_CREATOR_ENTRY_ID = 'entry.1033891774';
 
 function formatDate(value: string) {
   if (!value) return '';
@@ -24,27 +23,43 @@ function buildDateTime(dateStr: string, timeStr: string) {
   return [date, timeStr].filter(Boolean).join(' ');
 }
 
+function getValidStaffIds(staffIds: string[]) {
+  return staffIds.filter((staffId) => staffId.trim().length > 0);
+}
+
 function formatStaff(entries: StaffEntry[]) {
   return entries
+    .filter((e) => getValidStaffIds(e.staffIds).length > 0)
     .map((e) => {
+      const validStaffIds = getValidStaffIds(e.staffIds);
       const parts = [];
       if (e.date || e.startDate || e.endDate) {
         if (e.date) parts.push(`[${formatDate(e.date)}]`);
         else if (e.startDate && e.endDate) parts.push(`[${formatDate(e.startDate)} - ${formatDate(e.endDate)}]`);
       }
-      if (e.staffIds.length > 0) parts.push(e.staffIds.join(', '));
+      if (validStaffIds.length > 0) parts.push(validStaffIds.join(', '));
       return parts.join(' ');
     })
     .filter(Boolean)
     .join('\n');
 }
 
+function getSelectedTechInCharge(formData: FeedbackFormData) {
+  return formData.techInCharge.level1 || formData.techInCharge.level2;
+}
+
+function getEntriesWithStaff(entries: StaffEntry[]) {
+  return entries.filter((entry) => getValidStaffIds(entry.staffIds).length > 0);
+}
+
 /** Lấy chung 1 ngày làm đại diện cho nhóm (trong trường hợp chọn ngày chung) */
 function extractSharedDate(entries: StaffEntry[]) {
-  const entryWithDate = entries.find((e) => e.date);
+  const entriesWithStaff = getEntriesWithStaff(entries);
+
+  const entryWithDate = entriesWithStaff.find((e) => e.date);
   if (entryWithDate) return formatDate(entryWithDate.date);
 
-  const entryWithRange = entries.find((e) => e.startDate || e.endDate);
+  const entryWithRange = entriesWithStaff.find((e) => e.startDate || e.endDate);
   if (entryWithRange) {
     if (entryWithRange.startDate && entryWithRange.endDate) {
        return `${formatDate(entryWithRange.startDate)} - ${formatDate(entryWithRange.endDate)}`;
@@ -56,6 +71,12 @@ function extractSharedDate(entries: StaffEntry[]) {
 
 function buildGoogleFormPayload(formData: FeedbackFormData) {
   const payload = new URLSearchParams();
+  const warehouseEntries = [...formData.warehousePrep.level1, ...formData.warehousePrep.level2];
+  const installationEntries = [
+    ...formData.installation.level1,
+    ...formData.installation.level2,
+    ...formData.installation.level3,
+  ];
 
   payload.set('fvv', GOOGLE_FORM_STATIC_FIELDS.fvv);
   payload.set('pageHistory', GOOGLE_FORM_STATIC_FIELDS.pageHistory);
@@ -84,18 +105,16 @@ function buildGoogleFormPayload(formData: FeedbackFormData) {
 
   // === STAFF INFO ===
   payload.set('entry.1900880307', formData.salesInCharge);
-  if (GOOGLE_FORM_TECH_TICKET_CREATOR_ENTRY_ID) {
-    payload.set(GOOGLE_FORM_TECH_TICKET_CREATOR_ENTRY_ID, formData.techTicketCreator);
-  }
-  payload.set('entry.1777249788', formData.techInCharge);
+  payload.set(GOOGLE_FORM_TECH_TICKET_CREATOR_ENTRY_ID, formData.techTicketCreator);
+  payload.set('entry.1777249788', getSelectedTechInCharge(formData));
 
   // Warehouse Prep
-  payload.set('entry.217305236', extractSharedDate(formData.warehousePrep.level1));
+  payload.set('entry.217305236', extractSharedDate(warehouseEntries));
   payload.set('entry.404425797', formatStaff(formData.warehousePrep.level1));
   payload.set('entry.492044026', formatStaff(formData.warehousePrep.level2));
 
   // Installation
-  payload.set('entry.955548771', extractSharedDate(formData.installation.level1));
+  payload.set('entry.955548771', extractSharedDate(installationEntries));
   payload.set('entry.2077669955', formatStaff(formData.installation.level1));
   payload.set('entry.1706442310', formatStaff(formData.installation.level2));
   payload.set('entry.1691509760', formatStaff(formData.installation.level3));
