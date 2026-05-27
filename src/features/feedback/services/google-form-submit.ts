@@ -44,10 +44,6 @@ function formatStaff(entries: StaffEntry[]) {
     .join('\n');
 }
 
-function getSelectedTechInCharge(formData: FeedbackFormData) {
-  return formData.techInCharge.level1 || formData.techInCharge.level2;
-}
-
 function getEntriesWithStaff(entries: StaffEntry[]) {
   return entries.filter((entry) => getValidStaffIds(entry.staffIds).length > 0);
 }
@@ -106,7 +102,8 @@ function buildGoogleFormPayload(formData: FeedbackFormData) {
   // === STAFF INFO ===
   payload.set('entry.1900880307', formData.salesInCharge);
   payload.set(GOOGLE_FORM_TECH_TICKET_CREATOR_ENTRY_ID, formData.techTicketCreator);
-  payload.set('entry.1777249788', getSelectedTechInCharge(formData));
+  payload.set('entry.1777249788', formData.techInCharge.level1);
+  payload.set('entry.1988458583', formData.techInCharge.level2);
 
   // Warehouse Prep
   payload.set('entry.217305236', extractSharedDate(warehouseEntries));
