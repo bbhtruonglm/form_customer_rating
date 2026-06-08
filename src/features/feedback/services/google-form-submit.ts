@@ -67,7 +67,6 @@ function extractSharedDate(entries: StaffEntry[]) {
 
 function buildGoogleFormPayload(formData: FeedbackFormData) {
   const payload = new URLSearchParams();
-  const warehouseEntries = [...formData.warehousePrep.level1, ...formData.warehousePrep.level2];
   const installationEntries = [
     ...formData.installation.level1,
     ...formData.installation.level2,
@@ -105,10 +104,10 @@ function buildGoogleFormPayload(formData: FeedbackFormData) {
   payload.set('entry.1777249788', formData.techInCharge.level1);
   payload.set('entry.1988458583', formData.techInCharge.level2);
 
-  // Warehouse Prep
-  payload.set('entry.217305236', extractSharedDate(warehouseEntries));
-  payload.set('entry.404425797', formatStaff(formData.warehousePrep.level1));
-  payload.set('entry.492044026', formatStaff(formData.warehousePrep.level2));
+  // Warehouse Prep - da bo khoi luong nhap lieu noi bo hien tai
+  payload.set('entry.217305236', '');
+  payload.set('entry.404425797', '');
+  payload.set('entry.492044026', '');
 
   // Installation
   payload.set('entry.955548771', extractSharedDate(installationEntries));
@@ -124,9 +123,9 @@ function buildGoogleFormPayload(formData: FeedbackFormData) {
   payload.set('entry.827728974', extractSharedDate(formData.programDuty));
   payload.set('entry.665789547', formatStaff(formData.programDuty));
 
-  // Truck Support
-  payload.set('entry.991533957', extractSharedDate(formData.truckSupport));
-  payload.set('entry.1515894882', formatStaff(formData.truckSupport));
+  // Truck Support - da bo khoi luong nhap lieu noi bo hien tai
+  payload.set('entry.991533957', '');
+  payload.set('entry.1515894882', '');
 
   // Motorbike 30-50km
   payload.set('entry.1076483016', extractSharedDate(formData.motorbikeTravel30To50));
@@ -136,9 +135,9 @@ function buildGoogleFormPayload(formData: FeedbackFormData) {
   payload.set('entry.1408787746', extractSharedDate(formData.motorbikeTravelOver50));
   payload.set('entry.854122927', formatStaff(formData.motorbikeTravelOver50));
 
-  // Parking
-  payload.set('entry.1411143016', extractSharedDate(formData.parking));
-  payload.set('entry.633200803', formatStaff(formData.parking));
+  // Parking - da bo khoi luong nhap lieu noi bo hien tai
+  payload.set('entry.1411143016', '');
+  payload.set('entry.633200803', '');
 
   // Other Info
   payload.set('entry.671987802', formData.otherInfo);

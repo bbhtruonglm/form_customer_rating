@@ -7,6 +7,7 @@ import { Calendar, ChevronDown, ChevronLeft, ChevronRight, Clock } from 'lucide-
  * Để quy định các tham số đầu vào cần thiết khi tái sử dụng UI chọn thời gian
  */
 interface DateSelectProps {
+  disabledDates?: string[];
   name: string;
   nameTime?: string;
   onChange: (event: ChangeEvent<HTMLInputElement>) => void;
@@ -160,6 +161,7 @@ function getCalendarDays(visible_month: Date) {
  * Để người dùng click vào popover và thực hiện chọn thời gian
  */
 export default function DateSelect({
+  disabledDates = [],
   name,
   nameTime: name_time,
   onChange: on_change,
@@ -183,6 +185,7 @@ export default function DateSelect({
   // Khai báo biến giữ object Date chuyển đổi từ value chuỗi
   // Để làm giá trị tính toán và so sánh UI hiển thị
   let selected_date = parseDateValue(value);
+  let disabled_date_set = new Set(disabledDates.filter(Boolean));
   
   // Khai báo state quản lý tháng đang được focus hiển thị trên lịch
   // Để hỗ trợ lùi tới các tháng khác nhau khi bấm nút
@@ -258,7 +261,10 @@ export default function DateSelect({
       
   // Khai báo class quy định màu nền của ô ngày đang chọn
   // Để đồng nhất giao diện theo style quy định (sky hoặc staff slate)
-  let selected_day_class = variant === 'staff' ? 'bg-slate-900 text-white' : 'bg-sky-600 text-white';
+  let selected_day_class =
+    variant === 'staff'
+      ? 'border border-sky-300 bg-sky-50 text-sky-700'
+      : 'bg-sky-600 text-white';
   
   // Kiểm tra cờ cho trạng thái đã chọn ngày
   // Để có dữ kiện quyết định thông báo cần điền tiếp hay không
@@ -324,9 +330,15 @@ export default function DateSelect({
    * Để lưu kết quả và định hướng luồng chọn tiếp theo (có giờ không)
    */
   function handleSelectDate(date: Date) {
+    let next_value = formatDateValue(date);
+
+    if (disabled_date_set.has(next_value)) {
+      return;
+    }
+
     // Gửi sự kiện cập nhật giá trị ra prop onChange ngoài component
     // Để báo cho form lưu giá trị lại
-    on_change(createSyntheticEvent(name, formatDateValue(date)));
+    on_change(createSyntheticEvent(name, next_value));
     
     // Đồng bộ lại tháng vừa chọn vào state
     // Để lịch nhảy theo nếu bấm chọn một ngày ở rìa tháng khác
@@ -375,10 +387,10 @@ export default function DateSelect({
       // Để hiển thị đơn giản
       return (
         <>
-          <span className={`block truncate text-[14px] font-semibold ${value ? 'text-slate-800' : 'text-slate-400'}`}>
+          <span className={`block truncate text-[14px] font-semibold ${value ? 'text-sky-700' : 'text-slate-400'}`}>
             {formatDisplayDate(value) || placeholder}
           </span>
-          <p className="mt-0.5 text-sm font-bold uppercase text-slate-600">
+          <p className={`mt-0.5 text-sm font-bold uppercase ${value ? 'text-sky-600' : 'text-slate-600'}`}>
             {value ? 'Đã chọn thời gian' : 'Chưa chọn đủ thông tin'}
           </p>
         </>
@@ -525,10 +537,12 @@ export default function DateSelect({
                   // Xác định xem ngày đang vẽ có thuộc tháng hiển thị không
                   // Để thay đổi style hiển thị cho ngày trong/ngoài tháng
                   let is_current_month = date.getMonth() === visible_month.getMonth();
+                  let formatted_date = formatDateValue(date);
                   
                   // Xác định xem ngày đang vẽ có phải là ngày được chọn không
                   // Để highlight nếu đúng
                   let is_selected = isSameDate(selected_date, date);
+                  let is_disabled = disabled_date_set.has(formatted_date);
 
                   // Trả về nút bấm chọn ngày
                   // Để render lên lưới lịch
@@ -538,10 +552,13 @@ export default function DateSelect({
                       className={`flex h-9 items-center justify-center rounded-lg text-sm font-bold transition-colors ${
                         is_selected
                           ? selected_day_class
+                          : is_disabled
+                            ? 'cursor-not-allowed bg-slate-100 text-slate-300'
                           : is_current_month
                             ? 'text-slate-700 hover:bg-sky-50'
                             : 'text-slate-300 hover:bg-slate-50'
                       }`}
+                      disabled={is_disabled}
                       onClick={() => handleSelectDate(date)}
                       type="button"
                     >
@@ -554,7 +571,8 @@ export default function DateSelect({
 
             <div className="mt-2 flex items-center justify-end gap-2 border-t border-slate-100 pt-2">
               <button
-                className="rounded-xl px-4 py-2 text-sm font-bold text-slate-500 transition-colors hover:bg-slate-50 hover:text-slate-700"
+                className="rounded-xl px-4 py-2 text-sm font-bold text-slate-500 transition-colors hover:bg-slate-50 hover:text-slate-700 disabled:cursor-not-allowed disabled:text-slate-300"
+                disabled={disabled_date_set.has(formatDateValue(new Date()))}
                 onClick={() => handleSelectDate(new Date())}
                 type="button"
               >

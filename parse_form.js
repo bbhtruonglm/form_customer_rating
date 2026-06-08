@@ -1,5 +1,5 @@
 const fs = require('fs');
-fetch('https://docs.google.com/forms/d/e/1FAIpQLSetYIT4X_zbcjo-EDWP1KVEnJ4ncGM8MyyeBfBnbTyt5CC7Cg/viewform')
+fetch('https://docs.google.com/forms/d/e/1FAIpQLScp1fU-oEG221hG2yXX3P_cHNQ0Kzy83VN_MzXqyaDuXcrqMw/viewform')
   .then(res => res.text())
   .then(html => {
     const match = html.match(/var FB_PUBLIC_LOAD_DATA_ = (\[.+\]);/);

@@ -124,30 +124,104 @@ export function useFeedbackForm() {
     }));
   }
 
+  function hasCompletedSimpleEntry(entry: StaffEntry) {
+    return Boolean(entry.date) && entry.staffIds.length > 0;
+  }
+
+  function canAddSimpleEntry(entries: StaffEntry[]) {
+    if (entries.length === 0) {
+      return true;
+    }
+
+    return hasCompletedSimpleEntry(entries.at(-1)!);
+  }
+
+  function hasDuplicateSimpleDate(
+    entries: StaffEntry[],
+    currentId: string,
+    nextDate: string,
+  ) {
+    if (!nextDate) {
+      return false;
+    }
+
+    return entries.some((entry) => entry.id !== currentId && entry.date === nextDate);
+  }
+
+  function hasCompletedNestedGroup(
+    sectionEntries: FeedbackFormData[NestedStaffSectionKey],
+    groupId: string,
+  ) {
+    const groupEntries = Object.values(sectionEntries)
+      .flat()
+      .filter((entry) => entry.id === groupId);
+
+    return groupEntries.some((entry) => Boolean(entry.date)) && groupEntries.some((entry) => entry.staffIds.length > 0);
+  }
+
+  function canAddNestedGroup(sectionEntries: FeedbackFormData[NestedStaffSectionKey]) {
+    const firstSubSection = Object.values(sectionEntries)[0];
+
+    if (!firstSubSection || firstSubSection.length === 0) {
+      return true;
+    }
+
+    const lastEntry = firstSubSection.at(-1);
+
+    if (!lastEntry) {
+      return true;
+    }
+
+    return hasCompletedNestedGroup(sectionEntries, lastEntry.id);
+  }
+
+  function hasDuplicateNestedDate(
+    sectionEntries: FeedbackFormData[NestedStaffSectionKey],
+    currentId: string,
+    nextDate: string,
+  ) {
+    if (!nextDate) {
+      return false;
+    }
+
+    return Object.values(sectionEntries)
+      .flat()
+      .some((entry) => entry.id !== currentId && entry.date === nextDate);
+  }
+
   /** 
    * Thêm một nhóm nhân sự mới vào các section lồng nhau.
    * Tại sao: Một lần nhấn nút 'Thêm nhóm' sẽ tạo mới đồng thời level1, level2 (và level3 nếu có) dùng chung ID.
    */
   function addNestedStaffGroup<T extends NestedStaffSectionKey>(section: T) {
-    /** Tạo ID duy nhất cho nhóm nhân sự mới */
-    const GROUP_ID = createStaffEntry().id;
+    let groupId = '';
 
-    SET_FORM_DATA((previous) => ({
-      ...previous,
-      [section]: {
-        ...previous[section],
-        ...(section === 'warehousePrep'
-          ? {
-              level1: [...previous.warehousePrep.level1, createStaffEntry(GROUP_ID)],
-              level2: [...previous.warehousePrep.level2, createStaffEntry(GROUP_ID)],
-            }
-          : {
-              level1: [...previous.installation.level1, createStaffEntry(GROUP_ID)],
-              level2: [...previous.installation.level2, createStaffEntry(GROUP_ID)],
-              level3: [...previous.installation.level3, createStaffEntry(GROUP_ID)],
-            }),
-      },
-    }));
+    SET_FORM_DATA((previous) => {
+      if (!canAddNestedGroup(previous[section])) {
+        return previous;
+      }
+
+      groupId = createStaffEntry().id;
+
+      return {
+        ...previous,
+        [section]: {
+          ...previous[section],
+          ...(section === 'warehousePrep'
+            ? {
+                level1: [...previous.warehousePrep.level1, createStaffEntry(groupId)],
+                level2: [...previous.warehousePrep.level2, createStaffEntry(groupId)],
+              }
+            : {
+                level1: [...previous.installation.level1, createStaffEntry(groupId)],
+                level2: [...previous.installation.level2, createStaffEntry(groupId)],
+                level3: [...previous.installation.level3, createStaffEntry(groupId)],
+              }),
+        },
+      };
+    });
+
+    return groupId;
   }
 
   /** 
@@ -182,32 +256,38 @@ export function useFeedbackForm() {
     id: string,
     value: string,
   ) {
-    SET_FORM_DATA((previous) => ({
-      ...previous,
-      [section]: {
-        ...previous[section],
-        ...(section === 'warehousePrep'
-          ? {
-              level1: previous.warehousePrep.level1.map((entry) =>
-                entry.id === id ? { ...entry, date: value } : entry,
-              ),
-              level2: previous.warehousePrep.level2.map((entry) =>
-                entry.id === id ? { ...entry, date: value } : entry,
-              ),
-            }
-          : {
-              level1: previous.installation.level1.map((entry) =>
-                entry.id === id ? { ...entry, date: value } : entry,
-              ),
-              level2: previous.installation.level2.map((entry) =>
-                entry.id === id ? { ...entry, date: value } : entry,
-              ),
-              level3: previous.installation.level3.map((entry) =>
-                entry.id === id ? { ...entry, date: value } : entry,
-              ),
-            }),
-      },
-    }));
+    SET_FORM_DATA((previous) => {
+      if (hasDuplicateNestedDate(previous[section], id, value)) {
+        return previous;
+      }
+
+      return {
+        ...previous,
+        [section]: {
+          ...previous[section],
+          ...(section === 'warehousePrep'
+            ? {
+                level1: previous.warehousePrep.level1.map((entry) =>
+                  entry.id === id ? { ...entry, date: value } : entry,
+                ),
+                level2: previous.warehousePrep.level2.map((entry) =>
+                  entry.id === id ? { ...entry, date: value } : entry,
+                ),
+              }
+            : {
+                level1: previous.installation.level1.map((entry) =>
+                  entry.id === id ? { ...entry, date: value } : entry,
+                ),
+                level2: previous.installation.level2.map((entry) =>
+                  entry.id === id ? { ...entry, date: value } : entry,
+                ),
+                level3: previous.installation.level3.map((entry) =>
+                  entry.id === id ? { ...entry, date: value } : entry,
+                ),
+              }),
+        },
+      };
+    });
   }
 
   /** 
@@ -220,12 +300,22 @@ export function useFeedbackForm() {
     field: keyof StaffEntry,
     value: StaffEntry[keyof StaffEntry],
   ) {
-    SET_FORM_DATA((previous) => ({
-      ...previous,
-      [section]: previous[section].map((entry) =>
-        entry.id === id ? { ...entry, [field]: value } : entry,
-      ),
-    }));
+    SET_FORM_DATA((previous) => {
+      if (
+        field === 'date' &&
+        typeof value === 'string' &&
+        hasDuplicateSimpleDate(previous[section], id, value)
+      ) {
+        return previous;
+      }
+
+      return {
+        ...previous,
+        [section]: previous[section].map((entry) =>
+          entry.id === id ? { ...entry, [field]: value } : entry,
+        ),
+      };
+    });
   }
 
   /** 
@@ -233,10 +323,23 @@ export function useFeedbackForm() {
    * Tại sao: Cho phép người dùng bổ sung thêm nhân sự tham gia các công việc phụ trợ.
    */
   function addSimpleStaffEntry(section: SimpleStaffSectionKey) {
-    SET_FORM_DATA((previous) => ({
-      ...previous,
-      [section]: [...previous[section], createStaffEntry()],
-    }));
+    let entryId = '';
+
+    SET_FORM_DATA((previous) => {
+      if (!canAddSimpleEntry(previous[section])) {
+        return previous;
+      }
+
+      const newEntry = createStaffEntry();
+      entryId = newEntry.id;
+
+      return {
+        ...previous,
+        [section]: [...previous[section], newEntry],
+      };
+    });
+
+    return entryId;
   }
 
   /** 

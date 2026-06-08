@@ -19,6 +19,7 @@ export const TECH_STAFF = [
   'Nguyễn Văn Công',
   'Nguyễn Quang Hiếu',
   'Lý Văn Hòa',
+  'Trần Văn Hùng',
   'Dương Văn Hùng',
   'Trần Bá Hùng',
   'Nguyễn Chí Linh',
@@ -108,10 +109,8 @@ export const NESTED_STAFF_SECTIONS: NestedStaffSectionConfig[] = [
 ];
 
 export const SIMPLE_STAFF_SECTIONS: SimpleStaffSectionConfig[] = [
-  { key: 'overnightGuard', label: 'Trông đồ đêm' },
   { key: 'programDuty', label: 'Trực chương trình' },
-  { key: 'truckSupport', label: 'Hỗ trợ lái xe tải' },
+  { key: 'overnightGuard', label: 'Trông đồ đêm' },
   { key: 'motorbikeTravel30To50', label: 'Di chuyển bằng xe máy 30-50km' },
   { key: 'motorbikeTravelOver50', label: 'Di chuyển bằng xe máy trên 50km' },
-  { key: 'parking', label: 'Gửi xe' },
 ];

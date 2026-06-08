@@ -1,5 +1,5 @@
 import type { ChangeEvent } from 'react';
-import { ArrowRight, Briefcase, ChevronLeft, Package, Plus } from 'lucide-react';
+import { ArrowRight, ChevronLeft, Plus } from 'lucide-react';
 
 import DateSelect from '@/components/ui/DateSelect';
 import SearchableMultiSelect from '@/components/ui/SearchableMultiSelect';
@@ -22,8 +22,8 @@ import type {
 interface StaffStepProps {
   formData: FeedbackFormData;
   isSaving: boolean;
-  onAddNestedGroup: <T extends NestedStaffSectionKey>(section: T) => void;
-  onAddSimpleEntry: (section: SimpleStaffSectionKey) => void;
+  onAddNestedGroup: <T extends NestedStaffSectionKey>(section: T) => string;
+  onAddSimpleEntry: (section: SimpleStaffSectionKey) => string;
   onBack: () => void;
   onInputChange: (
     event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>,
@@ -76,23 +76,33 @@ function StaffEntryCard({
 }
 
 function SimpleStaffEntryCard({
+  disabledDates,
   entries,
   onDateChange,
   onRemove,
+  sectionKey,
   onToggleStaff,
 }: {
+  disabledDates: string[];
   entries: StaffEntry[];
   onDateChange: (id: string, value: string) => void;
   onRemove: (id: string) => void;
+  sectionKey: SimpleStaffSectionKey;
   onToggleStaff: (id: string, staffName: string) => void;
 }) {
   return (
     <div className="space-y-3">
       {entries.map((entry) => (
-        <div key={entry.id} className="space-y-3 rounded-2xl border border-sky-100 bg-white p-3.5">
+        <div
+          key={entry.id}
+          className="space-y-3 rounded-2xl border border-sky-100 bg-white p-3.5"
+          data-entry-card
+          id={`${sectionKey}-${entry.id}`}
+        >
           <div className="flex items-center justify-between">
             <div className="min-w-0 flex-1">
               <DateSelect
+                disabledDates={disabledDates.filter((date) => date !== entry.date)}
                 name={entry.id}
                 onChange={(event) => onDateChange(entry.id, event.target.value)}
                 placeholder="Chọn ngày thực hiện"
@@ -140,9 +150,6 @@ export default function StaffStep({
   saveError,
   saveSuccessMessage,
 }: StaffStepProps) {
-  const warehouseSections = NESTED_STAFF_SECTIONS.filter(
-    (sectionConfig) => sectionConfig.section === 'warehousePrep',
-  );
   const installationSections = NESTED_STAFF_SECTIONS.filter(
     (sectionConfig) => sectionConfig.section === 'installation',
   );
@@ -212,6 +219,66 @@ export default function StaffStep({
 
   const handleTechInChargeChange = (level: TechInChargeLevel) => (value: string) => {
     onUpdateTechInCharge(level, value);
+  };
+
+  const hasCompletedSimpleEntry = (entry: StaffEntry) =>
+    Boolean(entry.date) && entry.staffIds.length > 0;
+
+  const canAddSimpleEntry = (entries: StaffEntry[]) =>
+    entries.length === 0 || hasCompletedSimpleEntry(entries.at(-1)!);
+
+  const hasCompletedNestedGroup = (section: NestedStaffSectionKey, groupId: string) => {
+    const groupEntries = Object.values(formData[section])
+      .flat()
+      .filter((entry) => entry.id === groupId);
+
+    return groupEntries.some((entry) => Boolean(entry.date)) && groupEntries.some((entry) => entry.staffIds.length > 0);
+  };
+
+  const canAddNestedGroup = (section: NestedStaffSectionKey) => {
+    const firstSubSection = Object.values(formData[section])[0];
+
+    if (!firstSubSection || firstSubSection.length === 0) {
+      return true;
+    }
+
+    const lastEntry = firstSubSection.at(-1);
+
+    if (!lastEntry) {
+      return true;
+    }
+
+    return hasCompletedNestedGroup(section, lastEntry.id);
+  };
+
+  const getNestedDisabledDates = (section: NestedStaffSectionKey, currentId: string) =>
+    Object.values(formData[section])
+      .flat()
+      .filter((entry) => entry.id !== currentId && Boolean(entry.date))
+      .map((entry) => entry.date)
+      .filter((date, index, dates) => dates.indexOf(date) === index);
+
+  const scrollToEntry = (entryId: string) => {
+    if (!entryId) {
+      return;
+    }
+
+    window.setTimeout(() => {
+      document.getElementById(entryId)?.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start',
+      });
+    }, 150);
+  };
+
+  const handleAddNestedGroup = (section: NestedStaffSectionKey) => {
+    const newGroupId = onAddNestedGroup(section);
+    scrollToEntry(`${section}-${newGroupId}`);
+  };
+
+  const handleAddSimpleEntry = (section: SimpleStaffSectionKey) => {
+    const newEntryId = onAddSimpleEntry(section);
+    scrollToEntry(`${section}-${newEntryId}`);
   };
 
   return (
@@ -306,79 +373,13 @@ export default function StaffStep({
         <div className="grid grid-cols-1 gap-3">
           <div className="space-y-2.5 rounded-2xl border border-slate-200 bg-white p-2.5 shadow-sm shadow-slate-200/70">
             <div className="flex items-center justify-between gap-3">
-              <div className="flex items-center gap-3 pr-3 text-sm font-black uppercase text-slate-900">
-1. Chuẩn bị tại kho
+              <div className="flex items-center gap-3 pr-3 text-sm font-black uppercase text-red-600 sm:text-xs">
+                1. Lắp đặt
               </div>
               <button
-                className="flex h-8 items-center gap-1.5 rounded-full border border-slate-300 bg-white px-2.5 text-[10px] font-black uppercase text-slate-800 transition-colors hover:border-slate-400 hover:bg-slate-100"
-                onClick={() => onAddNestedGroup('warehousePrep')}
-                type="button"
-              >
-                <Plus className="h-3.5 w-3.5" /> Thêm ngày
-              </button>
-            </div>
-            <div className="space-y-2.5">
-              {getGroupedEntries('warehousePrep', warehouseSections).map((group) => (
-                <div key={group.id} className="space-y-2.5 rounded-2xl border border-slate-200 bg-[#f5f7fa] p-2.5">
-                  <div className="flex items-start gap-3">
-                    <div className="min-w-0 flex-1">
-                      <DateSelect
-                        name={`${group.id}-warehouse-date`}
-                        onChange={(event) => onUpdateNestedDate('warehousePrep', group.id, event.target.value)}
-                        placeholder="Chọn ngày chuẩn bị"
-                        value={group.date}
-                        variant="staff"
-                      />
-                    </div>
-                    {formData.warehousePrep.level1.length > 1 ? (
-                      <button
-                        className="mt-1 text-sm font-bold text-slate-500 transition-colors hover:text-red-500"
-                        onClick={() => onRemoveNestedGroup('warehousePrep', group.id)}
-                        type="button"
-                      >
-                        Xóa
-                      </button>
-                    ) : null}
-                  </div>
-                    <div className="grid grid-cols-1 gap-2.5 lg:grid-cols-2">
-                    {group.items.map(({ config, entry }) => {
-                      const excludedStaff = getExcludedNestedStaff(
-                        config.section,
-                        config.subSection,
-                        entry,
-                      );
-                      const availableStaff = getAvailableStaff(entry, excludedStaff);
-                      const Icon = config.icon;
-
-                      return (
-                        <div key={`${group.id}-${config.subSection}`} className="space-y-1.5">
-                          <div className="flex items-center gap-2.5 text-xs font-black uppercase text-slate-700">
-                            <Icon className="h-4.5 w-4.5 text-slate-800" /> {config.label}
-                          </div>
-                          <StaffEntryCard
-                            availableStaff={availableStaff}
-                            entry={entry}
-                            onToggleStaff={(id, staffName) =>
-                              onToggleNestedStaff(config.section, config.subSection, id, staffName)
-                            }
-                          />
-                        </div>
-                      );
-                    })}
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          <div className="space-y-2.5 rounded-2xl border border-slate-200 bg-white p-2.5 shadow-sm shadow-slate-200/70">
-            <div className="flex items-center justify-between gap-3">
-              <div className="flex items-center gap-3 pr-3 text-sm font-black uppercase text-slate-900 sm:text-xs">
-                2. Lắp đặt
-              </div>
-              <button
-                className="flex h-8 items-center gap-1.5 rounded-full border border-slate-300 bg-white px-2.5 text-[10px] font-black uppercase text-slate-800 transition-colors hover:border-slate-400 hover:bg-slate-100"
-                onClick={() => onAddNestedGroup('installation')}
+                className="flex h-8 items-center gap-1.5 rounded-full border border-slate-300 bg-white px-2.5 text-[10px] font-black uppercase text-slate-800 transition-colors hover:border-slate-400 hover:bg-slate-100 disabled:cursor-not-allowed disabled:border-slate-200 disabled:bg-slate-100 disabled:text-slate-400"
+                disabled={!canAddNestedGroup('installation')}
+                onClick={() => handleAddNestedGroup('installation')}
                 type="button"
               >
                 <Plus className="h-3.5 w-3.5" /> Thêm ngày
@@ -386,10 +387,16 @@ export default function StaffStep({
             </div>
             <div className="space-y-2.5">
               {getGroupedEntries('installation', installationSections).map((group) => (
-                <div key={group.id} className="space-y-2.5 rounded-2xl border border-slate-200 bg-[#f5f7fa] p-2.5">
+                <div
+                  key={group.id}
+                  className="space-y-2.5 rounded-2xl border border-slate-200 bg-[#f5f7fa] p-2.5"
+                  data-entry-card
+                  id={`installation-${group.id}`}
+                >
                   <div className="flex items-start gap-3">
                     <div className="min-w-0 flex-1">
                       <DateSelect
+                        disabledDates={getNestedDisabledDates('installation', group.id)}
                         name={`${group.id}-installation-date`}
                         onChange={(event) => onUpdateNestedDate('installation', group.id, event.target.value)}
                         placeholder="Chọn ngày lắp đặt"
@@ -444,14 +451,16 @@ export default function StaffStep({
             <div
               key={section.key}
               className="space-y-2.5 rounded-[1rem] border border-slate-200 bg-white p-2.5 shadow-sm shadow-slate-200/70"
+              data-section={section.key}
             >
               <div className="flex items-center justify-between">
-                <h4 className="text-sm font-black uppercase text-slate-700">
-                  {index + 3}. {section.label}
+                <h4 className="text-sm font-black uppercase text-red-600">
+                  {index + 2}. {section.label}
                 </h4>
                 <button
-                  className="flex h-9 w-9 items-center justify-center rounded-full bg-slate-900 text-white transition-colors hover:bg-slate-800 sm:h-6 sm:w-6"
-                  onClick={() => onAddSimpleEntry(section.key)}
+                  className="flex h-9 w-9 items-center justify-center rounded-full bg-slate-900 text-white transition-colors hover:bg-slate-800 disabled:cursor-not-allowed disabled:bg-slate-300 sm:h-6 sm:w-6"
+                  disabled={!canAddSimpleEntry(formData[section.key])}
+                  onClick={() => handleAddSimpleEntry(section.key)}
                   type="button"
                 >
                   <Plus className="h-4 w-4 sm:h-3 sm:w-3" />
@@ -459,9 +468,11 @@ export default function StaffStep({
               </div>
 
               <SimpleStaffEntryCard
+                disabledDates={formData[section.key].map((entry) => entry.date).filter(Boolean)}
                 entries={formData[section.key]}
                 onDateChange={(id, value) => onUpdateSimpleEntry(section.key, id, 'date', value)}
                 onRemove={(id) => onRemoveSimpleEntry(section.key, id)}
+                sectionKey={section.key}
                 onToggleStaff={(id, staffName) => onToggleSimpleStaff(section.key, id, staffName)}
               />
             </div>
@@ -469,8 +480,8 @@ export default function StaffStep({
         </div>
 
         <div className="flex flex-col gap-2">
-          <label className="text-sm font-black uppercase text-black ">
-            9. Thông tin khác
+          <label className="text-sm font-black uppercase text-red-600">
+            6. Thông tin khác
           </label>
           <textarea
             className="min-h-28 resize-none rounded-[1.75rem] border border-slate-300 bg-white px-5 py-4 text-base text-slate-900 outline-none transition-all placeholder:text-slate-400 focus:border-slate-500 focus:ring-4 focus:ring-slate-200/70 sm:min-h-0"
