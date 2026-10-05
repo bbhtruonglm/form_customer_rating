@@ -11,7 +11,7 @@ export const SALES_STAFF = [
   'Đinh Thị Sợi',
   'Bùi Thị Thu Hương',
   'Nguyễn Thị Thanh Hoài',
-  'Lê Đức Long',
+  'Ngô Thị Phương Anh',
 ];
 
 export const TECH_STAFF = [
@@ -28,6 +28,7 @@ export const TECH_STAFF = [
   'Phùng Thái Quân',
   'Nguyễn Ngọc Tuấn',
   'Nguyễn Văn Tuấn',
+  'Nguyễn Tâm Thức',
 ];
 
 export const EQUIPMENT_ITEMS = [
